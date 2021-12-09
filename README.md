@@ -1,6 +1,6 @@
-## magicwand
+## hsvfinder
 
-Flood filling masking tool.
+Reporting HSV values in flood filling masked areas.
 
 Displays an image with a tolerance trackbar. A user can click anywhere on the image to seed a selection, where the range of allowable deviation from a color is given by the trackbar value. The mean and standard deviation of the selected region is displayed in the window's status bar.
 
@@ -8,18 +8,17 @@ Displays an image with a tolerance trackbar. A user can click anywhere on the im
 
 ## Getting Started
 
-Install into a Python virtual environment, as you would any other Python project.
+Install into a conda env, as you would any other Python project.
 
 ```sh
-$ python3 -m venv venv
-$ source venv/bin/activate
-(venv) $ pip install git+https://github.com/alkasm/magicwand
+$ conda activate <my-env>
+(my-env) $ pip install git+https://github.com/danmaclean/hsvfinder
 ```
 
 Run the module as a script on any image you want:
 
 ```sh
-(venv) $ python3 -m magicwand path/to/image.png
+(venv) $ python -m hsvfinder path/to/image.png
 ```
 
 ## Usage
@@ -27,7 +26,7 @@ Run the module as a script on any image you want:
 As a script, just run the module directly as above. You can always check the `--help` flag when running the module as a script for more info:
 
 ```sh
-(venv) $ python3 -m magicwand --help
+(venv) $ python -m hasvfinder --help
 usage: magic wand selector [-h] image
 
 positional arguments:
@@ -40,7 +39,7 @@ optional arguments:
 Use inside your own Python projects:
 
 ```python
->>> from magicwand import SelectionWindow
+>>> from hsvfinder import SelectionWindow
 >>> import cv2 as cv
 >>> 
 >>> img = cv.imread("lane.jpg")

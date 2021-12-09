@@ -1,10 +1,10 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="magicwand",
-    version="1.0.0",
-    author="Alexander Reynolds",
+    name="hsvfinder",
+    version="0.0.1",
+    author="Dan MacLean, Alexander Reynolds",
     install_requires=["opencv-python"],
     packages=find_packages(),
-    description="Flood filling masking tool.",
+    description="Reporting HSV values in flood filled masked areas.",
 )

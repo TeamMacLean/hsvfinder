@@ -4,7 +4,7 @@ import argparse
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser("magic wand selector")
+    parser = argparse.ArgumentParser("HSV magic wand selector")
     parser.add_argument("image", help="path to image")
     args = parser.parse_args()
 
