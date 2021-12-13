@@ -16,30 +16,33 @@ def _find_exterior_contours(img):
     raise Exception("Check the signature for `cv.findContours()`.")
 
 def bgr_to_hsv(b,g,r):
-    return colorsys.rgb_to_hsv(r,g,b)
+    return colorsys.rgb_to_hsv(r/255,g/255,b/255)
 
 
-def summarise(hsv_min, hsv_max, hsv_mean, hsv_std):
+def summarise(hsv_mean, hsv_std):
 
     return "----Current Selection----\n" \
-           "H max: {}, H min: {}, H mean: {}, H sd: {}\n" \
-           "S max: {}, S min: {}, S mean: {}, S sd: {}\n" \
-           "V max: {}, V min: {}, V mean: {}, V sd: {}\n" \
-           "\n" \
-           "Select new areas to update or Press [q] or [esc] in the preview to close the window.\n" \
-           "Click to seed a selection.\n" \
-           " * [SHIFT] adds to the selection.\n" \
-           " * [ALT] subtracts from the selection.\n" \
-           " * [SHIFT] + [ALT] intersects the selections.\n" \
-           " * Tolerance slider changes range of colours included by magic wand" \
-           "\n".format(hsv_max[0], hsv_min[0], hsv_mean[0], hsv_std[0],
-                       hsv_max[1], hsv_min[1], hsv_mean[1], hsv_std[1],
-                       hsv_max[2], hsv_min[2], hsv_mean[2], hsv_std[2]
+           "H mean: {}, H sd: {}\n" \
+           "S mean: {}, S sd: {}\n" \
+           "V mean: {}, V sd: {}\n" \
+           "\n".format(hsv_mean[0], hsv_std[0],
+                       hsv_mean[1], hsv_std[1],
+                       hsv_mean[2], hsv_std[2]
                        )
 
+def guide():
+    return "Select new areas to update or Press [q] or [esc] in the preview to close the window.\n" \
+           "Click to seed a selection.\n" \
+           " * [SHIFT] adds to the selection." \
+           " * [ALT] subtracts from the selection." \
+           " * [SHIFT] + [ALT] intersects the selections.\n" \
+           " * Tolerance slider changes range of colours included by magic wand" \
+           "\n"
+
 class SelectionWindow:
-    def __init__(self, img, name="Magic Wand Selector", connectivity=4, tolerance=32):
+    def __init__(self, img, name="Magic Wand Selector", connectivity=4, tolerance=32, show_hsv=False):
         self.name = name
+        self.show_hsv = show_hsv
         h, w = img.shape[:2]
         self.img = img
         self.mask = np.zeros((h, w), dtype=np.uint8)
@@ -96,24 +99,24 @@ class SelectionWindow:
         viz = cv.drawContours(viz, contours, -1, color=(255,) * 3, thickness=1)
 
         self.mean, self.stddev = cv.meanStdDev(self.img, mask=self.mask)
-        bmin, bmax, _minidx, _maxidx  = cv.minMaxLoc(self.img[:,:,0] )
-        gmin, gmax, _minidx, _maxidx = cv.minMaxLoc(self.img[:, :, 1], mask=self.mask)
-        rmin, rmax, _minidx, _maxidx = cv.minMaxLoc(self.img[:, :, 2], mask=self.mask)
-        hsv_min = bgr_to_hsv(bmin,gmin,rmin)
-        hsv_max = bgr_to_hsv(bmax,gmax,rmax)
-        hsv_mean =  bgr_to_hsv(*self.mean[:, 0])
-        hsv_std = bgr_to_hsv(*self.stddev[:, 0])
 
-        summary_txt = summarise(hsv_min, hsv_max, hsv_mean, hsv_std)
-        print(summary_txt)
+        if self.show_hsv:
+            hsv_mean =  bgr_to_hsv(*self.mean[:, 0])
+            hsv_std = bgr_to_hsv(*self.stddev[:, 0])
+
+            summary_txt = summarise(hsv_mean, hsv_std)
+            print(summary_txt)
+
+        count = cv.countNonZero(self.mask)
+        g = guide()
+        print(g)
+        print("Pixels in Selected Area = {}".format(count))
         cv.imshow(self.name, viz)
-        #cv.displayStatusBar(self.name, ", ".join((meanstr, stdstr)))
 
 
     def show(self):
         """Draws a window with the supplied image."""
         self._update()
-        print("Press [q] or [esc] in the preview to close the window.")
         while True:
             k = cv.waitKey(0) & 0xFF
             if k in (ord("q"), ord("\x1b")):

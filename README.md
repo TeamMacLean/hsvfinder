@@ -2,13 +2,29 @@
 
 Reporting HSV values in flood filling masked areas.
 
-Displays an image with a tolerance trackbar. A user can click anywhere on the image to seed a selection, where the range of allowable deviation from a color is given by the trackbar value. The mean and standard deviation of the selected region is displayed in the window's status bar.
+Displays an image with a tolerance trackbar. A user can click anywhere on the image to seed a selection, where the range of allowable deviation from a colour is given by the trackbar value. The size of the selected region is shown in the terminal window
 
-![Example Image](readme-example.png)
+![Example Image](readme-example.jpg)
+
+```sh
+Select new areas to update or Press [q] or [esc] in the preview to close the window.
+Click to seed a selection.
+ * [SHIFT] adds to the selection. * [ALT] subtracts from the selection. * [SHIFT] + [ALT] intersects the selections.
+ * Tolerance slider changes range of colours included by magic wand
+
+Pixels in Selected Area = 964
+```
 
 ## Getting Started
 
-Install into a conda env, as you would any other Python project.
+Install into a conda env from PyPI 
+
+```sh
+$ conda activate <my-env>
+(my-env) $ pip install hsvfinder
+```
+
+or from GitHub
 
 ```sh
 $ conda activate <my-env>
@@ -18,7 +34,7 @@ $ conda activate <my-env>
 Run the module as a script on any image you want:
 
 ```sh
-(venv) $ python -m hsvfinder path/to/image.png
+(venv) $ python -m hsvfinder path/to/image.jpg
 ```
 
 ## Usage
@@ -26,36 +42,15 @@ Run the module as a script on any image you want:
 As a script, just run the module directly as above. You can always check the `--help` flag when running the module as a script for more info:
 
 ```sh
-(venv) $ python -m hasvfinder --help
-usage: magic wand selector [-h] image
+(venv) $ python -m hsvfinder --help
+usage: HSV magic wand selector [-h] [-s] image
 
 positional arguments:
-  image       path to image
+  image           path to image
 
 optional arguments:
-  -h, --help  show this help message and exit
+  -h, --help      show this help message and exit
+  -s, --show_hsv  show a HSV stat summary.
+
 ```
 
-Use inside your own Python projects:
-
-```python
->>> from hsvfinder import SelectionWindow
->>> import cv2 as cv
->>> 
->>> img = cv.imread("lane.jpg")
->>> window = SelectionWindow(img)
->>> window.show()
->>> 
->>> print(f"Selection mean: {window.mean[:, 0]}.")
-Selection mean: [106.76420172  93.78792503  89.71121334].
-```
-
-The window object has a few properties you might be interested in after successfully filtering your image:
-
-```python
->>> window.mean     # average value for each channel - from cv.meanStdDev(img, mask)
->>> window.stddev   # standard deviation for each channel - from cv.meanStdDev(img, mask)
->>> window.mask     # mask from cv.floodFill()
->>> window.img      # image input into the window
->>> window.seed     # most recent seed point for cv.floodFill()
-```

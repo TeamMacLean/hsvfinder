@@ -2,3 +2,7 @@
 __pycache__/
 *.egg-info
 .idea/
+push_to_pypi.sh
+.eggs/
+build/
+dist/
