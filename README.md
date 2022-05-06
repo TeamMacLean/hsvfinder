@@ -17,14 +17,8 @@ Pixels in Selected Area = 964
 
 ## Getting Started
 
-Install into a conda env from PyPI 
 
-```sh
-$ conda activate <my-env>
-(my-env) $ pip install hsvfinder
-```
-
-or from GitHub
+Install from GitHub
 
 ```sh
 $ conda activate <my-env>
