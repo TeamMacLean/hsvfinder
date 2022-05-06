@@ -28,7 +28,7 @@ or from GitHub
 
 ```sh
 $ conda activate <my-env>
-(my-env) $ pip install git+https://github.com/danmaclean/hsvfinder
+(my-env) $ pip install git+https://github.com/TeamMacLean/hsvfinder
 ```
 
 Run the module as a script on any image you want:
